@@ -1,5 +1,11 @@
 #! /usr/bin/python3
 
 import random
-with open("numbers.txt", "w") as f:
-    f.writelines("{}\n".format(random.randint(-1000000, 1000000)) for _ in range(5000000))
+
+
+def create_file(filename, size):
+    with open(filename, "w") as f:
+        f.writelines("{}\n".format(random.randint(-1000000, 1000000)) for _ in range(size))
+
+
+create_file("numbers.txt", 5000000)

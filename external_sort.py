@@ -4,6 +4,12 @@ import tempfile
 import shutil
 
 
+def sort(filename, sorted_name, chunk_size):
+    chunks = split_file(filename, chunk_size=chunk_size)
+    file = merge_sort(chunks, chunk_size=chunk_size, savefile_name=sorted_name)
+    file.close()
+
+
 def split_file(name, chunk_size=5000):
     large_file = open(name)
     temp_list = []
