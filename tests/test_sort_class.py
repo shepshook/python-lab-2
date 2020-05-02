@@ -1,23 +1,27 @@
 import unittest
-from .. import external_sort, create_large_file
-import os, time
+import os
+import time
+import create_large_file
+import external_sort
 
 
 class TestExternalSortResult(unittest.TestCase):
     def setUp(self):
-        create_large_file.create_file("numbers.txt", 1000)
+        self.input = os.getcwd() + "/numbers.txt"
+        self.output = os.getcwd() + "/output.txt"
+        create_large_file.create_file(self.input, 1000)
 
     def test_external_sort_result(self):
-        external_sort.sort("numbers.txt", "sorted.txt", 50)
+        external_sort.sort(self.input, self.output, 50)
         self.assertTrue(self.file_sorted())
 
     def file_sorted(self):
-        with open("sorted.txt", 'r') as file:
-            a = int(file.readline())
-            b = int(file.readline())
+        with open(self.output, 'r') as file:
+            a = file.readline()
+            b = file.readline()
             while True:
                 if b:
-                    if a > b:
+                    if int(a) > int(b):
                         return False
                     a = b
                     b = int(file.readline())
@@ -26,20 +30,22 @@ class TestExternalSortResult(unittest.TestCase):
             return True
 
     def tearDown(self):
-        os.remove("numbers.txt")
-        os.remove("sorted.txt")
+        os.remove(self.input)
+        os.remove(self.output)
 
 
 class TestExternalSortPerformance(unittest.TestCase):
     def setUp(self):
-        create_large_file.create_file("numbers.txt", 100000)
+        self.input = os.getcwd() + "/numbers.txt"
+        self.output = os.getcwd() + "/output.txt"
+        create_large_file.create_file(self.input, 100000)
         self.start_time = time.time()
 
     def test_external_sort_performance(self):
-        external_sort.sort("numbers.txt", "sorted.txt")
+        external_sort.sort(self.input, self.output, 5000)
 
     def tearDown(self):
-        print(f"Sorted in {time.time() - self.start_time}")
-        os.remove("numbers.txt")
-        os.remove("sorted.txt")
+        print(f"Sorted 100000 nums in {time.time() - self.start_time}")
+        os.remove(self.input)
+        os.remove(self.output)
 
