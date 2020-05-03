@@ -1,6 +1,5 @@
 import textwrap
 
-
 def serialize(obj):
     if isinstance(obj, dict):
         result = "{\n"
@@ -15,7 +14,7 @@ def serialize(obj):
         result += "}"
         return result
 
-    elif isinstance(obj, list):
+    elif isinstance(obj, list) or isinstance(obj, tuple):
         result = "[\n"
         items = ""
         for i, item in enumerate(obj):
@@ -43,21 +42,21 @@ def serialize(obj):
     elif isinstance(obj, object):
         return serialize(obj.__dict__)
 
-class B:
+
+class NestedClass:
     def __init__(self):
-        self.s = "string of B"
-        self.d = {"a": 1, "b": 2, "c": 3}
+        self.tup = (1, (2, 3))
 
-class A:
+
+class TestClass:
     def __init__(self):
-        self.a = 1
-        self.b = [1, 2, 3]
-        self.c = B()
+        self.s = "zen of python"
+        self.l = [1, 2, 5]
+        self.n = 123
+        self.t = (3, 4, 5)
+        self.d = {"a": 1, "b": 4}
+        self.b = False
+        self.c = NestedClass()
 
-#serialize({"a": 1, "b": 2, "c": 3})
 
-#serialize([1, 1, 2, 3, 5, 8, 13])
-
-#print(A().__dict__)
-
-print(serialize(A()))
+#print(serialize(TestClass()))
