@@ -8,4 +8,5 @@ def create_file(filename, size):
         f.writelines("{}\n".format(random.randint(-1000000, 1000000)) for _ in range(size))
 
 
-create_file("numbers.txt", 5000000)
+if __name__ == "__main__":
+    create_file("numbers.txt", 5000000)
