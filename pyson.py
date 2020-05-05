@@ -24,8 +24,8 @@ def serialize(obj):
     elif isinstance(obj, str):
         return f"\"{obj}\""
 
-    elif isinstance(obj, int):
-        return obj
+    elif isinstance(obj, int) or isinstance(obj, float):
+        return str(obj)
 
     elif isinstance(obj, bool):
         return "true" if obj else "false"
