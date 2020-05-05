@@ -1,3 +1,4 @@
+from argparse import ArgumentError
 from math import sqrt
 
 
@@ -5,55 +6,47 @@ class Vector:
     def __init__(self, values):
         self.__vec = values
 
-    def add(self, other):
-        if self.len() != other.len():
-            raise Exception("Vectors must match their sizes!")
-        result = []
-        for i in range(self.len()):
-            result.append(self.__vec[i] + other.get(i))
-        return Vector(result)
+    def __iter__(self):
+        return iter(self.__vec)
 
-    def sub(self, other):
-        if self.len() != other.len():
-            raise Exception("Vectors must match their sizes!")
-        result = []
-        for i in range(0, self.len()):
-            result.append(self.__vec[i] - other.get(i))
-        return Vector(result)
+    def __next__(self):
+        for x in self.__vec:
+            yield x
+        raise StopIteration
 
-    def mul(self, number):
-        result = []
-        for i in range(self.len()):
-            result.append(self.__vec[i] * number)
-        return Vector(result)
+    def __add__(self, other):
+        if len(self) != len(other):
+            raise ArgumentError
+        return Vector([x + y for x, y in zip(self, other)])
 
-    def dot(self, other):
-        if self.len() != other.len():
-            raise Exception("Vectors must match their sizes!")
-        res = 0
-        for i in range(self.len()):
-            res += self.__vec[i] * other.get(i)
-        return res
+    def __sub__(self, other):
+        if len(self) != len(other):
+            raise ArgumentError
+        return Vector([x - y for x, y in zip(self, other)])
 
-    def equals(self, other):
-        if self.len() != other.len():
+    def __mul__(self, other):
+        if isinstance(other, Vector) and len(self) == len(other):
+            return sum([x * y for x, y in zip(self, other)])
+        return Vector([x * other for x in self])
+
+    def __rmul__(self, other):
+        return self * other
+
+    def __eq__(self, other):
+        if len(self) != len(other):
             return False
-        for i in range(0, self.len()):
-            if self.get(i) != other.get(i):
-                return False
-        return True
+        return all([x == y for x, y in zip(self, other)])
 
-    def len(self):
+    def __len__(self):
         return len(self.__vec)
 
     def norm(self):
-        return sqrt(self.dot(self))
+        return sqrt(self * self)
 
     def get(self, i):
-        if i < 0 or i > self.len():
+        if i < 0 or i > len(self):
             raise IndexError
         return self.__vec[i]
 
-    def to_string(self):
-        separator = ", "
-        return "[" + separator.join([f"{x} " for x in self.__vec]) + "]"
+    def __str__(self):
+        return "[" + ", ".join([f"{x}" for x in self.__vec]) + "]"
