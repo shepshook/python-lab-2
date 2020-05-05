@@ -1,30 +1,24 @@
 import textwrap
+from os import linesep as ls
+
 
 def serialize(obj):
     if isinstance(obj, dict):
-        result = "{\n"
-        items = ""
-        for i, (k, v) in enumerate(obj.items()):
-            items += f"\"{k}\": {serialize(v)}"
-            if i < len(obj.items()) - 1:
-                items += ","
-            items += "\n"
-        items = textwrap.indent(items, "  ")
-        result += items
-        result += "}"
+        result = f"{{{ls}"
+        items = []
+        for k, v in obj.items():
+            items.append(f"\"{k}\": {serialize(v)}")
+        result += textwrap.indent(f",{ls}".join(items), "  ")
+        result += f"{ls}}}"
         return result
 
     elif isinstance(obj, list) or isinstance(obj, tuple):
-        result = "[\n"
-        items = ""
-        for i, item in enumerate(obj):
-            items += f"{serialize(item)}"
-            if i < len(obj) - 1:
-                items += ","
-            items += "\n"
-        items = textwrap.indent(items, "  ")
-        result += items
-        result += "]"
+        result = f"[{ls}"
+        items = []
+        for item in obj:
+            items.append(f"{serialize(item)}")
+        result += textwrap.indent(f",{ls}".join(items), "  ")
+        result += f"{ls}]"
         return result
 
     elif isinstance(obj, str):
@@ -39,8 +33,12 @@ def serialize(obj):
     elif obj is None:
         return "null"
 
-    elif isinstance(obj, object):
-        return serialize(obj.__dict__)
+    else:
+        try:
+            props = getattr(obj, "__dict__")
+            return serialize(props)
+        except AttributeError:
+            raise ValueError("Object has no __dict__ attribute")
 
 
 class NestedClass:
@@ -57,6 +55,3 @@ class TestClass:
         self.d = {"a": 1, "b": 4}
         self.b = False
         self.c = NestedClass()
-
-
-#print(serialize(TestClass()))
