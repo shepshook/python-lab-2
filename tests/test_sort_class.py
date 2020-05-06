@@ -38,14 +38,14 @@ class TestExternalSortPerformance(unittest.TestCase):
     def setUp(self):
         self.input = os.getcwd() + "/numbers.txt"
         self.output = os.getcwd() + "/output.txt"
-        create_large_file.create_file(self.input, 100000)
+        create_large_file.create_file(self.input, 1000000)
         self.start_time = time.time()
 
     def test_external_sort_performance(self):
-        external_sort.sort(self.input, self.output, 5000)
+        external_sort.sort(self.input, self.output, 50000)
 
     def tearDown(self):
-        print(f"Sorted 100000 nums in {time.time() - self.start_time}")
+        print(f"Sorted 1000000 nums in {time.time() - self.start_time}")
         os.remove(self.input)
         os.remove(self.output)
 
