@@ -1,4 +1,3 @@
-from argparse import ArgumentError
 from math import sqrt
 
 
@@ -16,12 +15,12 @@ class Vector:
 
     def __add__(self, other):
         if len(self) != len(other):
-            raise ArgumentError
+            raise ValueError
         return Vector([x + y for x, y in zip(self, other)])
 
     def __sub__(self, other):
         if len(self) != len(other):
-            raise ArgumentError
+            raise ValueError
         return Vector([x - y for x, y in zip(self, other)])
 
     def __mul__(self, other):

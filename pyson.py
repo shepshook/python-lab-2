@@ -4,21 +4,13 @@ from os import linesep as ls
 
 def serialize(obj):
     if isinstance(obj, dict):
-        result = f"{{{ls}"
-        items = []
-        for k, v in obj.items():
-            items.append(f"\"{k}\": {serialize(v)}")
-        result += textwrap.indent(f",{ls}".join(items), "  ")
-        result += f"{ls}}}"
+        items = [f"\"{k}\": {serialize(v)}" for k, v in obj.items()]
+        result = f"{{{ls}" + textwrap.indent(f",{ls}".join(items), "  ") + f"{ls}}}"
         return result
 
     elif isinstance(obj, list) or isinstance(obj, tuple):
-        result = f"[{ls}"
-        items = []
-        for item in obj:
-            items.append(f"{serialize(item)}")
-        result += textwrap.indent(f",{ls}".join(items), "  ")
-        result += f"{ls}]"
+        items = [f"{serialize(item)}" for item in obj]
+        result = f"[{ls}" + textwrap.indent(f",{ls}".join(items), "  ") + f"{ls}]"
         return result
 
     elif isinstance(obj, str):

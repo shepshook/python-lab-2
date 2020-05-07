@@ -4,9 +4,10 @@ def cached(func):
     def wrapper(*args, **kwargs):
         nonkeyed_args = tuple(args)
         keyed_args = tuple(sorted(kwargs.items()))
-        key = hash((nonkeyed_args, keyed_args))
-        if key in cache.keys():
-            return cache[key]
+        key = (nonkeyed_args, keyed_args)
+        result = cache.get(key)
+        if result:
+            return result
         result = func(*args, **kwargs)
         if result:
             cache[key] = result
